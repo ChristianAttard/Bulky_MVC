@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using BulkyBook.DataAccess.Data;
+﻿using BulkyBook.DataAccess.Data;
 using BulkyBook.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BulkyBook.DataAccess.Repository
 {
@@ -18,9 +13,10 @@ namespace BulkyBook.DataAccess.Repository
 		{
 			_db = db;
 			this.dbSet = _db.Set<T>();
-			//_db.Categories == dbSet			
+			//_db.Categories == dbSet	
+			//_db.Products.Include(u => u.Category).Include(u => u.CategoryId);
 		}
-		public void Add(T entity) 
+		public void Add(T entity)
 		{
 			dbSet.Add(entity);
 		}
@@ -34,7 +30,7 @@ namespace BulkyBook.DataAccess.Repository
 
 		public IEnumerable<T> GetAll()
 		{
-			IQueryable<T> query = dbSet;
+			IQueryable<T> query = dbSet;			
 			return query.ToList();
 		}
 
