@@ -45,8 +45,10 @@
 							</td>
 							<td>
 								@obj.Author
+							</td>							
+							<td>
+								@obj.Category?.Name
 							</td>
-							<td></td>
 							<td>
 								<div class="w-75 btn-group" rol="group">
 									<a asp-controller="Product" asp-action="Upsert" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
