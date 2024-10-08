@@ -153,7 +153,8 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.StreetAddress = Input.StreetAddress;
-                user.City = Input.City;                
+                user.City = Input.City;
+                user.Name = Input.Name;
                 user.PostalCode = Input.PostalCode; 
                 user.PhoneNumber = Input.PhoneNumber;
                 var result = await _userManager.CreateAsync(user, Input.Password);
