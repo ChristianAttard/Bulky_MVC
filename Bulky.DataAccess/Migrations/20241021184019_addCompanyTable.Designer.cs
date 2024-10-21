@@ -4,6 +4,7 @@ using BulkyBook.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BulkyBook.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241021184019_addCompanyTable")]
+    partial class addCompanyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,38 +96,6 @@ namespace BulkyBook.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            City = "Tech City",
-                            Name = "Tech Solution",
-                            PhoneNumber = "99491169",
-                            PostalCode = "1234",
-                            State = "Mgarr",
-                            StreetAddress = "123 Tech Str"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            City = "Har",
-                            Name = "Motherland",
-                            PhoneNumber = "99491169",
-                            PostalCode = "1234",
-                            State = "Mgarr",
-                            StreetAddress = "123 test"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            City = "Tech City",
-                            Name = "British Steel",
-                            PhoneNumber = "99491169",
-                            PostalCode = "1234",
-                            State = "Mgarr",
-                            StreetAddress = "123 Tech Str"
-                        });
                 });
 
             modelBuilder.Entity("BulkyBook.Models.Product", b =>
