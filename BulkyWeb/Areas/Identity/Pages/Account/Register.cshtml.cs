@@ -170,6 +170,7 @@ namespace BulkyBookWeb.Areas.Identity.Pages.Account
                 user.StreetAddress = Input.StreetAddress;
                 user.City = Input.City;
                 user.Name = Input.Name;
+                user.State = Input.State;
                 user.PostalCode = Input.PostalCode; 
                 user.PhoneNumber = Input.PhoneNumber;
 
