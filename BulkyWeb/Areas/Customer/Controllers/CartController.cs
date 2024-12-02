@@ -149,7 +149,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
                 }
 
                 var service = new SessionService();
-                Session session = service.Create(options);
+                Session session = service.Create(options);                
                 _unitOfWork.OrderHeader.UpdateStripPaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
                 _unitOfWork.Save();
                 Response.Headers.Add("Location", session.Url);
@@ -174,9 +174,9 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             {
                 //this is an order by customer
                 var service = new SessionService();
-                Session session = service.Get(orderHeader.SessionId);
+                Session session = service.Get(orderHeader.SessionId);                
 
-                if(session.PaymentStatus.ToLower() == "paid")
+                if (session.PaymentStatus.ToLower() == "paid")
                 {
                     _unitOfWork.OrderHeader.UpdateStripPaymentID(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
                     _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
