@@ -1,5 +1,6 @@
 using BulkyBook.DataAccess.Repository.IRepository;
 using BulkyBook.Models;
+using BulkyBook.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -21,44 +22,56 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (claim != null)
+            {
+                HttpContext.Session.SetInt32(SD.SessionCart,
+               _unitOfWork.ShoppingCart.GetAll(U => U.ApplicationUser.Id == claim.Value).Count());
+            }
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category");
             return View(productList);
         }
-		public IActionResult Details(int productId)
-		{
+        public IActionResult Details(int productId)
+        {
             ShoppingCart cart = new()
             {
                 Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category"),
                 Count = 1,
                 ProductId = productId
             };
-			
-			return View(cart);
-		}
+
+            return View(cart);
+        }
         [HttpPost]
         [Authorize]
         public IActionResult Details(ShoppingCart shoppingCart)
-        {           
+        {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             shoppingCart.ApplicationUserId = userId;
 
-            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(U=>U.ApplicationUser.Id == userId &&
-            U.ProductId==shoppingCart.ProductId);
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(U => U.ApplicationUser.Id == userId &&
+            U.ProductId == shoppingCart.ProductId);
 
             if (cartFromDb != null)
             {
                 //shopping cart already exist
                 cartFromDb.Count += shoppingCart.Count;
                 _unitOfWork.ShoppingCart.Update(cartFromDb);
-            } else
+                _unitOfWork.Save();
+            }
+            else
             {
                 //add cart record
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCart,
+                _unitOfWork.ShoppingCart.GetAll(U => U.ApplicationUser.Id == userId).Count());
             }
-            
-            _unitOfWork.Save();
-            
+            TempData["success"] = "Cart updated successfully";            
+
             return RedirectToAction(nameof(Index));
         }
 
